@@ -16,7 +16,7 @@ from django.template.defaultfilters import urlencode, escape
     <body>
       % if toolbar:
       <div class="toolbar">
-        <a href="${url('hbexplorer.views.index')}"><img src="/hbexplorer/static/art/hbexplorer.png" class="hbexplorer_icon"/></a>
+        <a href="${url('hbexplorer.views.list_clusters')}"><img src="/hbexplorer/static/art/hbexplorer.png" class="hbexplorer_icon"/></a>
       </div>
       % endif
 </%def>
