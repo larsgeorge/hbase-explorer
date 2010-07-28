@@ -22,5 +22,10 @@
 from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('hbexplorer',
-  url(r'^$', 'views.index'),
+  url(r'^$', 'views.list_clusters'),
+  url(r'^edit/(?P<clusterid>\w+)$', 'views.edit_cluster'),
+  url(r'^new$', 'views.edit_cluster', name="hbexplorer.newcluster"),
+  url(r'^delete/(?P<clusterid>\w+)$', 'views.delete_cluster')
+  #url(r'^explore/(?P<clusterid>\w+)$', 'views.explore_cluster')
 )
+
