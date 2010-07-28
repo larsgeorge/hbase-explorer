@@ -1,0 +1,5 @@
+copyright: Apache License v2.0
+version: 0.1
+description: HBase Explorer
+name: hbexplorer
+sources: [Source/HBaseExplorer/CCS.HBaseExplorer.js]
