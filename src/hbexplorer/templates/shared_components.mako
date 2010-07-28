@@ -25,3 +25,22 @@ from django.template.defaultfilters import urlencode, escape
     </body>
   </html>
 </%def>
+
+<%def name="render_field(field, hidden=False, notitle=False)">
+<%
+  cls = ""
+  if hidden: 
+    cls = "ccs-hidden"
+  titlecls = ""
+  if notitle or hidden:
+    titlecls = "ccs-hidden"
+%>
+  <dt class="${titlecls}">${field.label_tag() | n}</dt>
+  <dd class="${cls}">${str(field) | n}</dd>
+  % if len(field.errors):
+    <dt>&nbsp;</dt>
+    <dd class="ccs-error validation-advice">
+       ${str(field.errors) | n}
+     </dd>
+  % endif
+</%def>
