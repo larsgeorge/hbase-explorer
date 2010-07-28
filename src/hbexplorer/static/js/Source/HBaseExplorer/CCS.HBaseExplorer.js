@@ -19,6 +19,7 @@
  */
 
 /*
+---
 script: CCS.HBaseExplorer.js
 
 description: Defines CCS.HBaseExplorer; a Hue application that extends CCS.JBrowser.
@@ -30,6 +31,8 @@ requires:
 - ccs-shared/CCS.JBrowser
 
 provides: [CCS.HBaseExplorer]
+
+...
 */
 ART.Sheet.define('window.art.browser.hbexplorer', {
 	'min-width': 620
