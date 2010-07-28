@@ -21,24 +21,19 @@
 /*
 ---
 script: CCS.HBaseExplorer.js
-
 description: Defines CCS.HBaseExplorer; a Hue application that extends CCS.JBrowser.
-
-authors:
-- Lars George
-
-requires:
-- ccs-shared/CCS.JBrowser
-
+author: Lars George
+requires: [ccs-shared/CCS.JBrowser]
 provides: [CCS.HBaseExplorer]
 
 ...
 */
+
 ART.Sheet.define('window.art.browser.hbexplorer', {
 	'min-width': 620
 });
 
-var CCS.HBaseExplorer = new Class({
+CCS.HBaseExplorer = new Class({
 
 	Extends: CCS.JBrowser,
 
