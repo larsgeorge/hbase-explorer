@@ -25,7 +25,7 @@ ${shared.header("HBase Explorer")}
     <thead>
       <tr>
         <th>Cluster Address</th>
-        <th>Description</th>
+        <th colspan="2">Description</th>
       </tr>
     </thead>
     <tbody>
