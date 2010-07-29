@@ -22,11 +22,11 @@
   % if clusterid:
     ${shared.header('Edit Cluster Entry: ' + clusterid + ' -- HBase Clusters')}
   % else:
-    ${wrappers.head('Create Cluster Entry -- HBase Clusters')}
+    ${shared.header('Create Cluster Entry -- HBase Clusters')}
   % endif
 
 <div class="prompt_popup">
-<form action="/filebrowser/rename?next=${next|u}" method="POST" enctype="multipart/form-data">
+<form action="${action}" method="POST" enctype="multipart/form-data">
   <h4 class="ccs-hidden">
     % if clusterid:
       Edit Cluster Entry: ${clusterid}
@@ -36,13 +36,13 @@
   </h4>
   <dl>
     % for field in form:
-    ${render_field(field)}
+    ${shared.render_field(field)}
     % endfor
   </dl>
   <input class="ccs-hidden" type="submit" value="Submit" />
 </form>
 </div>
 
-<div class="ccs-hidden">Go back to where you were: <a href="${next|u}">${next}</a>.</div>
+##<div class="ccs-hidden">Go back to where you were: <a href="${next|u}">${next}</a>.</div>
     
 ${shared.footer()}
