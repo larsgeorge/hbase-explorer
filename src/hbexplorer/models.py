@@ -26,7 +26,7 @@ class ClusterAddress(models.Model):
     Holds metadata about all the known clusters.
     """
     owner = models.ForeignKey(User, db_index=True)
-    address = models.CharField(max_length=128)
+    address = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=1024)
 
     class Meta:
