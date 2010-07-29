@@ -22,13 +22,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class ClusterAddress(models.Model):
-  """
-  Holds metadata about all the known clusters.
-  """
-  owner = models.ForeignKey(User, db_index=True)
-  address = models.CharField(max_length=128)
-  description = models.CharField(max_length=1024)
+    """
+    Holds metadata about all the known clusters.
+    """
+    owner = models.ForeignKey(User, db_index=True)
+    address = models.CharField(max_length=128)
+    description = models.CharField(max_length=1024)
 
-  class Meta:
-    ordering = ['address']
+    class Meta:
+        ordering = ['address']
 
