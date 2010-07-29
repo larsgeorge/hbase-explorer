@@ -53,11 +53,13 @@ def edit_cluster(request, clusterid=None):
         instance = None
 
     if request.method == 'POST':
-        form = ClusterEntryForm(request.POST, instance=instance)
-        if form.is_valid(): # All validation rules pass
-            form.save()
-            request.path = urlresolvers.reverse(list_users)
-            return list_clusters(request)
+        form_dict = request.POST.copy()
+        form_dict["owner"] = request.user.id
+        form = ClusterEntryForm(form_dict, instance=instance)
+        #if form.is_valid(): # All validation rules pass
+        form.save()
+        request.path = urlresolvers.reverse(list_clusters)
+        return list_clusters(request)
     else:
         form = ClusterEntryForm(instance=instance)
     return render('edit_cluster.mako', request,
