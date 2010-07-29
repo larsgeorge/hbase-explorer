@@ -35,9 +35,8 @@
     % endif
   </h4>
   <dl>
-    % for field in form:
-    ${shared.render_field(field)}
-    % endfor
+    ${shared.render_field(form["address"])}
+    ${shared.render_field(form["description"])}
   </dl>
   <input class="ccs-hidden" type="submit" value="Submit" />
 </form>
