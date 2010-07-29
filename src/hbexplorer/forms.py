@@ -17,3 +17,10 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 # */
+
+from django.forms import ModelForm
+from hbexplorer.models import ClusterAddress
+
+class ClusterEntryForm(ModelForm):
+    class Meta:
+        model = ClusterAddress
