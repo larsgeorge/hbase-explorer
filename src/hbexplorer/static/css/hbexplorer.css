@@ -84,3 +84,9 @@
     color: #333;
     border: 1px solid #333;
 }
+.toolbar .hbexplorer-tb-actions {
+    position: absolute;
+    top: 58px;
+    text-align: right;
+    right: 12px;
+}
