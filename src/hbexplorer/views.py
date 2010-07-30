@@ -62,7 +62,7 @@ def edit_cluster(request, clusterid=None):
         return list_clusters(request)
     else:
         form = ClusterEntryForm(instance=instance)
-    return render('edit_cluster.mako', request,
+    return render("edit_cluster.mako", request,
         dict(form=form, action=request.path, clusterid=clusterid))
 
 def delete_cluster(request, clusterid):
@@ -78,3 +78,5 @@ def delete_cluster(request, clusterid):
         return render("confirm.mako", request,
         dict(path=request.path, title="Delete Cluster Entry?"))
 
+def explore_cluster(request, clusterid):
+    return render('explore_cluster.mako', request, dict(clusterid=clusterid))
