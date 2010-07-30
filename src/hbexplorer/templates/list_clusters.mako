@@ -40,11 +40,13 @@ ${shared.header("HBase Explorer", search_entry=True)}
       <tbody>
       % for cluster in clusters:
         <tr>
-        <td class="address">${cluster.address}</td>
+        <td class="address">
+          <a class="hbexplorer_link_entry" target="HBaseExplorer" href="/hbexplorer/explore/${cluster.address}">${cluster.address}</a>
+        </td>
         <td>${cluster.description}</td>
         <td>
-          <a title="Edit ${cluster.address}" class="edit frame_tip" href="${ url('hbexplorer.views.edit_cluster', clusterid=cluster.address) }">Edit</a>
-          <a title="Delete ${cluster.address}" class="delete frame_tip confirm_and_post" alt="Are you sure you want to delete ${cluster.address}?" href="${ url('hbexplorer.views.delete_cluster', clusterid=cluster.address) }">Delete</a>
+          <a title="Edit ${cluster.address}" class="hbexplorer-link-img edit frame_tip" href="${ url('hbexplorer.views.edit_cluster', clusterid=cluster.address) }">Edit</a>
+          <a title="Delete ${cluster.address}" class="hbexplorer-link-img delete frame_tip confirm_and_post" alt="Are you sure you want to delete ${cluster.address}?" href="${ url('hbexplorer.views.delete_cluster', clusterid=cluster.address) }">Delete</a>
         </td>
         </tr>
       % endfor
