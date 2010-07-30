@@ -48,7 +48,7 @@
 .hbexplorer_clusterlist table {
     border-bottom: 1px solid #B2B2B2;
 }
-.hbexplorer_clusterlist td a {
+.hbexplorer_clusterlist td a.hbexplorer-link-img {
     text-indent: -500px;
     display: block;
     float: left;
