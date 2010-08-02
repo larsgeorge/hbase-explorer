@@ -29,7 +29,7 @@ from django import forms
 from django.contrib.auth.models import User
 from desktop.lib.django_util import render, MessageException
 from django.core import urlresolvers
-from hbexplorer.models import ClusterAddress
+from hbexplorer.models import ClusterAddress, ClusterInfo
 from hbexplorer.forms import ClusterEntryForm
 
 #__users_lock = threading.Lock()
@@ -79,4 +79,5 @@ def delete_cluster(request, clusterid):
         dict(path=request.path, title="Delete Cluster Entry?"))
 
 def explore_cluster(request, clusterid):
-    return render('explore_cluster.mako', request, dict(clusterid=clusterid))
+    cluster_info = ClusterInfo(clusterid=clusterid)
+    return render('explore_cluster.mako', request, dict(clusterid=clusterid, tables=cluster_info.getTables()))

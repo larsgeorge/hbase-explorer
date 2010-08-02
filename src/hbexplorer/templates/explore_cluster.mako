@@ -26,7 +26,15 @@ ${shared.header("HBase Explorer")}
     <div class="hbexplorer_explorer_left left_col jframe_padded">
       <p>Cluster: ${clusterid}</p>
       <p>Available tables:</p>
-      <p><a data-splitview-resize="{'left':0}">hide help</a></p>
+      % if tables:
+        % for table in tables:
+        <p><a class="hbexplorer_link_table" href="/hbexplorer/explore/${table}">${table}</a></p>
+        % endfor
+      % else:
+        none   
+      % endif
+      <p><a data-splitview-resize="{'left':0}" title="hide help" class="hbexplorer-link-img hidehelp frame_tip">Hide</a>
+      <a data-splitview-resize="{'left':0}">hide help</a></p>
     </div>
     <div class="hbexplorer_explorer_right right_col jframe_padded">
       TBD.

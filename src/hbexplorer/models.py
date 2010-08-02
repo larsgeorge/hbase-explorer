@@ -20,6 +20,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from urllib2 import urlopen, Request, HTTPError, URLError
+import json
 
 class ClusterAddress(models.Model):
     """
@@ -30,5 +32,23 @@ class ClusterAddress(models.Model):
     description = models.CharField(max_length=1024)
 
     class Meta:
-        ordering = ['address']
+        ordering = ["address"]
 
+class ClusterInfo(object):
+    
+    def __init__(self, clusterid):
+        self.clusterid = clusterid
+        
+    def getTables(self):
+        url = "http://" + self.clusterid + "/"
+        request = Request(url, headers={"Accept":"application/json"})
+        try:
+            data = urlopen(request, timeout=30).read()
+        except HTTPError, e:
+            print "HTTP error: %d" % e.code
+        except URLError, e:
+            print "Network error: %s" % e.reason.args[1]
+        json_data = json.loads(data)
+        return [ table["name"] for table in json_data["table"] ]
+        
+        
