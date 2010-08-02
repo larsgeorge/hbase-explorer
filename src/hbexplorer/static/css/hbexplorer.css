@@ -84,6 +84,11 @@
     color: #333;
     border: 1px solid #333;
 }
+
+.hbexplorer_explorer .hbexplorer_explorer_left td a.hidehelp {
+    background: url('../art/application_side_contract.png') no-repeat 0 0px;
+}
+
 .toolbar .hbexplorer-tb-actions {
     position: absolute;
     top: 58px;
