@@ -17,7 +17,7 @@ from django.template.defaultfilters import urlencode, escape
           <input type="text" class="hbexplorer-search-entry headlamp_name_filter ccs-hidden"
             data-filters="OverText, ArtInput"
             data-art-input-type="search" title="Filter by Address"
-            data-filter-elements="td.address" data-filter-parents="tr" value=""/>
+            data-filter-elements="a.hbexplorer_link_entry" data-filter-parents="tr" value=""/>
           % endif
         </div>
       </div>

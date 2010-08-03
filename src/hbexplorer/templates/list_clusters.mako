@@ -40,7 +40,7 @@ ${shared.header("HBase Explorer", search_entry=True)}
       <tbody>
       % for cluster in clusters:
         <tr>
-        <td class="address">
+        <td>
           <a class="hbexplorer_link_entry" target="HBaseExplorer" href="/hbexplorer/explore/${cluster.address}">${cluster.address}</a>
         </td>
         <td>${cluster.description}</td>
