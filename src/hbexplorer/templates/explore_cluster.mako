@@ -27,7 +27,7 @@ ${shared.header("HBase Explorer")}
       <p>Cluster: ${clusterid}</p>
       <p>Available tables:</p>
       % if tables:
-        % for table in tables:
+        % for table in cluster_info.getTables():
         <p><a class="hbexplorer_link_table" href="/hbexplorer/explore/${table}">${table}</a></p>
         % endfor
       % else:
@@ -37,7 +37,28 @@ ${shared.header("HBase Explorer")}
       <a data-splitview-resize="{'left':0}">hide help</a></p>
     </div>
     <div class="hbexplorer_explorer_right right_col jframe_padded">
-      TBD.
+      <p>Cluster Version: ${cluster_info.getClusterVersion()}</p>
+      <p>Version: <div style="margin-left: 20px"><code><ul>
+      % for key, value in cluster_info.getVersion().iteritems():
+       <li>${key}: ${value}</li>
+      %endfor
+      </ul></code></div>
+      </p>
+      <p>Cluster Status: <div style="margin-left: 20px"><code><ul>
+      <% cluster_status = cluster_info.getClusterStatus() %>
+      % for key, value in cluster_status.iteritems():
+        % if key not in ("LiveNodes", "DeadNodes"):
+       <li>${key}: ${value}</li>
+        % endif
+      %endfor
+      <li>Live Nodes: <div style="margin-left: 40px"><code><ul>
+      % for node in cluster_status["LiveNodes"]:
+       <li>${node["Node"]}: </li>
+      % endfor
+        </ul></code></div>
+      </li>
+      </ul></code></div>
+      </p>
     </div>
   </div>
 </div>

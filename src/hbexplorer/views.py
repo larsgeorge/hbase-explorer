@@ -80,4 +80,4 @@ def delete_cluster(request, clusterid):
 
 def explore_cluster(request, clusterid):
     cluster_info = ClusterInfo(clusterid=clusterid)
-    return render('explore_cluster.mako', request, dict(clusterid=clusterid, tables=cluster_info.getTables()))
+    return render('explore_cluster.mako', request, dict(clusterid=clusterid, cluster_info=cluster_info))

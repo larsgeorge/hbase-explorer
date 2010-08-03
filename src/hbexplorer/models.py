@@ -21,6 +21,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from urllib2 import urlopen, Request, HTTPError, URLError
+from urlparse import urlparse, urlunparse
+
 import json
 
 class ClusterAddress(models.Model):
@@ -39,16 +41,32 @@ class ClusterInfo(object):
     def __init__(self, clusterid):
         self.clusterid = clusterid
         
-    def getTables(self):
-        url = "http://" + self.clusterid + "/"
+    def __getData(self, path):
+        url = urlunparse(('http', self.clusterid, path, None, None, None))
         request = Request(url, headers={"Accept":"application/json"})
-        try:
-            data = urlopen(request, timeout=30).read()
-        except HTTPError, e:
-            print "HTTP error: %d" % e.code
-        except URLError, e:
-            print "Network error: %s" % e.reason.args[1]
+        #try:
+        data = urlopen(request, timeout=30).read()
+        #except HTTPError, e:
+        #    print "HTTP error: %d" % e.code
+        #except URLError, e:
+        #    print "Network error: %s" % e.reason.args[1]
+        return data
+
+    def getVersion(self):
+        data = self.__getData("version")
+        json_data = json.loads(data)
+        return json_data
+
+    def getClusterVersion(self):
+        return self.__getData("version/cluster")
+
+    def getClusterStatus(self):
+        data = self.__getData("status/cluster")
+        json_data = json.loads(data)
+        return json_data
+
+    def getTables(self):
+        data = self.__getData(None)
         json_data = json.loads(data)
         return [ table["name"] for table in json_data["table"] ]
-        
         
