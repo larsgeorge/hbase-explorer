@@ -47,3 +47,19 @@ from django.template.defaultfilters import urlencode, escape
      </dd>
   % endif
 </%def>
+
+<%def name="render_json(json, indent=0, increment=15)">
+  % if type(json) in (list, tuple):
+    % for item in json:
+      ${render_json(item, indent + increment, increment)}
+    % endfor
+  % elif type(json) is dict:
+    <ul class="indent_${indent}">
+    % for key, value in json.iteritems():
+      <li>${key}: ${render_json(value)}</li>
+    % endfor
+    </ul>
+  % else:
+    ${json}
+  % endif
+</%def>

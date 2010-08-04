@@ -89,6 +89,16 @@
     background: url('../art/application_side_contract.png') no-repeat 0 0px;
 }
 
+.hbexplorer_explorer ul.indent_15 {
+    margin-left: 15px;
+    padding-left: 15px;
+}
+
+.hbexplorer_explorer ul.indent_30 {
+    margin-left: 30px;
+    padding-left: 30px;
+}
+
 .toolbar .hbexplorer-tb-actions {
     position: absolute;
     top: 58px;
