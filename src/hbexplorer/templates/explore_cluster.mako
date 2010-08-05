@@ -26,8 +26,9 @@ ${shared.header("HBase Explorer")}
     <div class="hbexplorer_explorer_left left_col jframe_padded">
       <p>Cluster: ${clusterid}</p>
       <p>Available tables:</p>
+      <% tables = cluster_info.getTables() %>
       % if tables:
-        % for table in cluster_info.getTables():
+        % for table in tables:
         <p><a class="hbexplorer_link_table" href="/hbexplorer/explore/${table}">${table}</a></p>
         % endfor
       % else:
@@ -37,7 +38,8 @@ ${shared.header("HBase Explorer")}
       <a data-splitview-resize="{'left':0}">hide help</a></p>
     </div>
     <div class="hbexplorer_explorer_right right_col jframe_padded">
-      <p><u>Cluster Version:</u> ${cluster_info.getClusterVersion()}</p>
+      <p>META: ${meta}</p>
+      <p><u>Cluster Version:</u> <code>HBase ${shared.render_json(cluster_info.getClusterVersion())}</code></p>
       <p><u>Version:</u> <code>${shared.render_json(cluster_info.getVersion())}</code></p>
       <p><u>Cluster Status:</u> <code>${shared.render_json(cluster_info.getClusterStatus())}</code></p>
     </div>
