@@ -26,9 +26,33 @@ from urlparse import urlparse, urlunparse
 
 import urllib, urllib2, httplib
 import json
+import socket, exceptions
 
 LOG = logging.getLogger(__name__)
-JSON = {"Accept":"application/json"}
+ACCEPT_JSON = {"Accept":"application/json"}
+MIME_XML = {"Content-Type": "text/xml"}
+    
+def doRequest(host=None, method="GET", url=None, headers=None, body=None, timeout=30, status=None):
+    """
+    Convenience function to make restful HTTP requests.
+    """
+    conn = None
+    try:
+        conn = httplib.HTTPConnection(host, timeout=timeout)
+        conn.request(method, url, body, headers)
+        response = conn.getresponse()
+        if status: assert(response.status == status)
+        data = response.read()
+        if response.length == 0: data = None
+    except httplib.HTTPException, e:
+       raise httplib.HTTPException("HTTP error: %d" % e.code)
+    except socket.error, e:
+       raise socket.error("Socket error: %s" % e.message)
+    except exceptions.IOError, e:
+       raise exceptions.IOError("IO error: %s" % e.message)
+    finally:
+        if conn: conn.close();
+    return {"body":data, "status":response.status, "headers":dict(response.getheaders())}
     
 class ClusterAddress(models.Model):
     """
@@ -43,107 +67,75 @@ class ClusterAddress(models.Model):
 
 class ClusterInfo(object):
     
-    def __init__(self, clusterid):
-        self.cluster_id = clusterid
+    def __init__(self, address):
+        self.address = address
         
     def __getData(self, path):
-        conn = None
-        try:
-            conn = httplib.HTTPConnection(self.cluster_id, timeout=30)
-            conn.request("GET", url=path, headers=JSON)
-            response = conn.getresponse()
-            assert(response.status == 200)
-            data = response.read()
-        except httplib.HTTPException, e:
-           raise httplib.HTTPException("HTTP error: %d" % e.code)
-        finally:
-            if conn: conn.close();
-        return data
+        res = doRequest(self.address, url=path, headers=ACCEPT_JSON, status=200)
+        if "body" in res: return res["body"]
+        return None
 
-    def getVersion(self):
-        data = self.__getData("/version")
+    def __parse(self, data):
+        if not data: return None
         json_data = json.loads(data)
         return json_data
+        
+    def getVersion(self):
+        data = self.__getData("/version")
+        return self.__parse(data)
 
     def getClusterVersion(self):
         data = self.__getData("/version/cluster")
-        json_data = json.loads(data)
-        return json_data
+        return self.__parse(data)
 
     def getClusterStatus(self):
         data = self.__getData("/status/cluster")
-        json_data = json.loads(data)
-        return json_data
+        return self.__parse(data)
 
     def getTables(self):
         data = self.__getData(None)
-        json_data = json.loads(data)
+        json_data = self.__parse(data)
+        if not json_data: return None
         return [ table["name"] for table in json_data["table"] ]
     
 class TableScanner(object):
 
-    def __init__(self, table_name, cluster_id):
+    def __init__(self, table_name, address, batch=1):
         self.table_name = table_name
-        self.cluster_id = cluster_id
+        self.address = address
+        self.batch = batch
         self.at_eot = False
         self.scanner_id = self.__openScanner()
         
     def __openScanner(self):
-        header = {"Content-Type": "text/xml"}
-        body = "<Scanner batch=\"1\"/>"
-        conn = None
-        try:
-            conn = httplib.HTTPConnection(self.cluster_id, timeout=30)
-            conn.request("POST", "/" + self.table_name + "/scanner", body, header)
-            response = conn.getresponse()
-            assert(response.status == 201)
-        except httplib.HTTPException, e:
-           raise httplib.HTTPException("HTTP error: %d" % e.code)
-        finally:
-            if conn: conn.close();
+        body = "<Scanner batch=\"" + unicode(self.batch) + "\"/>"
+        url = "/" + self.table_name + "/scanner"
+        LOG.debug("openScanner: url %s" % url)
+        res = doRequest(self.address, method="POST", url=url, headers=MIME_XML, body=body, status=201)
         # POST/PUT call returns a special header, e.g.
         #   Location: http://localhost:8000/content/scanner/12447063229213b1937
-        loc = response.getheader("Location")
+        loc = res["headers"]["location"]
         scanner_id = loc.rsplit("/", 1)[1]
         LOG.debug("openScanner: ID %s" % scanner_id)
         return scanner_id
             
     def __closeScanner(self, scanner_id):
-        conn = None
-        try:
-            url = "/" + self.table_name + "/scanner/" + self.scanner_id
-            LOG.debug("closeScanner: url %s" % url)
-            conn = httplib.HTTPConnection(self.cluster_id, timeout=30)
-            conn.request("DELETE", url=url, headers=JSON)
-            response = conn.getresponse()
-            assert(response.status == 200)
-        except httplib.HTTPException, e:
-           raise httplib.HTTPException("HTTP error: %d" % e.code)
-        finally:
-            if conn: conn.close();
+        url = "/" + self.table_name + "/scanner/" + self.scanner_id
+        LOG.debug("closeScanner: url %s" % url)
+        res = doRequest(self.address, method="DELETE", url=url, headers=ACCEPT_JSON, status=200)
       
-    def __getNextRow(self, scanner_id):
-        conn = None
-        try:
-            url = url="/" + self.table_name + "/scanner/" + self.scanner_id
-            LOG.debug("getNextRow: url %s" % url)
-            conn = httplib.HTTPConnection(self.cluster_id, timeout=30)
-            conn.request("GET", url=url, headers=JSON)
-            response = conn.getresponse()
-            #assert(response.status == 200)
-            if response.status == 204: self.at_eot = True
-            data = response.read()
-        except httplib.HTTPException, e:
-           raise httplib.HTTPException("HTTP error: %d" % e.code)
-        finally:
-            if conn: conn.close();
-        return data
+    def __getNextRows(self, scanner_id):
+        url = url="/" + self.table_name + "/scanner/" + self.scanner_id
+        LOG.debug("getNextRow: url %s" % url)
+        res = doRequest(self.address, url=url, headers=ACCEPT_JSON)
+        if res["status"] == 204: self.at_eot = True
+        return res["body"]
         
     def close(self):
         self.__closeScanner(self.scanner_id)
         
     def next(self):
-        return self.__getNextRow(self.scanner_id)
+        return self.__getNextRows(self.scanner_id)
     
     def at_eof(self):
         return self.at_eot

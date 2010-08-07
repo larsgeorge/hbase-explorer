@@ -24,7 +24,7 @@ ${shared.header("HBase Explorer")}
 <div id="hbexplorer_explorer" class="view">
   <div class="hbexplorer_explorer_wrapper splitview">
     <div class="hbexplorer_explorer_left left_col jframe_padded">
-      <p>Cluster: ${clusterid}</p>
+      <p>Cluster: ${address}</p>
       <p>Available tables:</p>
       <% tables = cluster_info.getTables() %>
       % if tables:
@@ -34,8 +34,7 @@ ${shared.header("HBase Explorer")}
       % else:
         none   
       % endif
-      <p><a data-splitview-resize="{'left':0}" title="hide help" class="hbexplorer-link-img hidehelp frame_tip">Hide</a>
-      <a data-splitview-resize="{'left':0}">hide help</a></p>
+      <p><a data-splitview-resize="{'left':0}" title="Hide help" class="hbexplorer-link-img hidehelp frame_tip">Hide</a></p>
     </div>
     <div class="hbexplorer_explorer_right right_col jframe_padded">
       <p>META: ${meta}</p>

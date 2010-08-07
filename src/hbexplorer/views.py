@@ -79,9 +79,9 @@ def delete_cluster(request, clusterid):
         dict(path=request.path, title="Delete Cluster Entry?"))
 
 def explore_cluster(request, clusterid):
-    scanner = TableScanner(".META.", clusterid)
+    scanner = TableScanner(".META.", clusterid, batch=20)
     meta = scanner.next()
     scanner.close()
     
-    cluster_info = ClusterInfo(clusterid=clusterid)
-    return render('explore_cluster.mako', request, dict(clusterid=clusterid, cluster_info=cluster_info, meta=meta))
+    cluster_info = ClusterInfo(address=clusterid)
+    return render('explore_cluster.mako', request, dict(address=clusterid, cluster_info=cluster_info, meta=meta))
