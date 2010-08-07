@@ -85,7 +85,16 @@
     border: 1px solid #333;
 }
 
-.hbexplorer_explorer .hbexplorer_explorer_left td a.hidehelp {
+.hbexplorer_explorer a.hbexplorer-link-img {
+    text-indent: -500px;
+    display: block;
+    float: left;
+    height: 18px;
+    width: 18px;
+    overflow: hidden;
+    margin-left: 0px;
+}
+.hbexplorer_explorer .hbexplorer_explorer_left a.hidehelp {
     background: url('../art/application_side_contract.png') no-repeat 0 0px;
 }
 
