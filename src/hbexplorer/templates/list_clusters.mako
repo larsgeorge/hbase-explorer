@@ -27,7 +27,7 @@ ${shared.header("HBase Explorer", search_entry=True)}
       <p>Welcome to the<br/><b>HBase Explorer</b>.</p>
       <p>Please add to, delete from or edit the list of known clusters on the right.</p>
       <p>Click on an address to open an explorer window for the respective cluster.</p>
-      <p><a data-splitview-resize="{'left':0}">hide help</a></p>
+      <p><a data-splitview-resize="{'left':0}" title="Hide help" class="hbexplorer-link-img hidehelp frame_tip">Hide</a></p>
     </div>
     <div class="hbexplorer_clusterlist_right right_col jframe_padded">
       <table class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
@@ -41,21 +41,25 @@ ${shared.header("HBase Explorer", search_entry=True)}
       % for cluster in clusters:
         <tr>
         <td>
-          <a class="hbexplorer_link_entry" target="HBaseExplorer" href="/hbexplorer/explore/${cluster.address}">${cluster.address}</a>
+          <a class="hbexplorer_link_entry" target="HBaseExplorer" 
+             href="${ url('hbexplorer.views.explore_cluster', clusterid=cluster.address) }">${cluster.address}</a>
         </td>
         <td>${cluster.description}</td>
         <td>
-          <a title="Edit ${cluster.address}" class="hbexplorer-link-img edit frame_tip" href="${ url('hbexplorer.views.edit_cluster', clusterid=cluster.address) }">Edit</a>
-          <a title="Delete ${cluster.address}" class="hbexplorer-link-img delete frame_tip confirm_and_post" alt="Are you sure you want to delete ${cluster.address}?" href="${ url('hbexplorer.views.delete_cluster', clusterid=cluster.address) }">Delete</a>
+          <a title="Edit ${cluster.address}" class="hbexplorer-link-img edit frame_tip" 
+             href="${ url('hbexplorer.views.edit_cluster', clusterid=cluster.address) }">Edit</a>
+          <a title="Delete ${cluster.address}" class="hbexplorer-link-img delete frame_tip confirm_and_post" 
+             alt="Are you sure you want to delete ${cluster.address}?" 
+             href="${ url('hbexplorer.views.delete_cluster', clusterid=cluster.address) }">Delete</a>
         </td>
         </tr>
       % endfor
       </tbody>
       </table>
       <a class="hbexplorer_add_cluster" href="${ url('hbexplorer.views.edit_cluster') }">Add Cluster</a>
-      ## only show "show help" when left column was closed by user
+      ## only show "Show help" when left column was closed by user, see "Hide help" above
       ##<br/><br/><br/>
-      ##<a data-splitview-toggle="{'side': 'left'}">show help</a>
+      ##<a data-splitview-toggle="{'side': 'left'}">Show help</a>
     </div>
   </div>
 </div>

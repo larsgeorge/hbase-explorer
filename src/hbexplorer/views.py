@@ -24,7 +24,6 @@ HBase Explorer application.
 """
 
 import django
-import threading
 from django import forms
 from django.contrib.auth.models import User
 from desktop.lib.django_util import render, MessageException
@@ -32,21 +31,10 @@ from django.core import urlresolvers
 from hbexplorer.models import ClusterAddress, ClusterInfo, TableScanner
 from hbexplorer.forms import ClusterEntryForm
 
-#__users_lock = threading.Lock()
-
 def list_clusters(request):
     return render('list_clusters.mako', request, dict(clusters=ClusterAddress.objects.all()))
 
 def edit_cluster(request, clusterid=None):
-    """
-    edit_cluster(request, clusterid = None) -> reply
-
-    @type request:        HttpRequest
-    @param request:       The request object
-    @type clusterid:       string
-    @param clusterid:      Default to None, when creating a new cluster entry
-    """
-
     if clusterid is not None:
         instance = ClusterAddress.objects.get(address=clusterid)
     else:
@@ -79,9 +67,16 @@ def delete_cluster(request, clusterid):
         dict(path=request.path, title="Delete Cluster Entry?"))
 
 def explore_cluster(request, clusterid):
-    scanner = TableScanner(".META.", clusterid, batch=20)
-    meta = scanner.next()
-    scanner.close()
-    
     cluster_info = ClusterInfo(address=clusterid)
-    return render('explore_cluster.mako', request, dict(address=clusterid, cluster_info=cluster_info, meta=meta))
+    return render('explore_cluster.mako', request, dict(address=clusterid, cluster_info=cluster_info))
+
+def explore_table(request, clusterid, tablename):
+    scanner = TableScanner(tablename, clusterid, batch=20)
+    rows = scanner.next()
+    scanner.close()
+    cluster_info = ClusterInfo(address=clusterid)
+    return render('explore_table.mako', request, 
+                  dict(address=clusterid, tablename=tablename, cluster_info=cluster_info, rows=rows))
+
+def edit_table(request, clusterid, tablename):
+    return render('edit_cluster.mako', request, dict(address=clusterid, tablename=tablename))

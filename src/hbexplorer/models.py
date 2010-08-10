@@ -27,6 +27,7 @@ from urlparse import urlparse, urlunparse
 import urllib, urllib2, httplib
 import json
 import socket, exceptions
+import base64
 
 LOG = logging.getLogger(__name__)
 ACCEPT_JSON = {"Accept":"application/json"}
@@ -100,33 +101,62 @@ class ClusterInfo(object):
     
 class TableScanner(object):
 
-    def __init__(self, table_name, address, batch=1):
+    def __init__(self, table_name, address, startRow=None, endRow=None, batch=1, startTime=None, endTime=None):
         self.table_name = table_name
         self.address = address
+        self.startRow = startRow
+        self.endRow = endRow
         self.batch = batch
+        self.startTime = startRow
+        self.endTime = endTime
         self.at_eot = False
         self.scanner_id = self.__openScanner()
         
+    """
+    <complexType name="Scanner">
+        <sequence>
+            <element name="column" type="base64Binary" minOccurs="0" maxOccurs="unbounded"></element>
+        </sequence>
+        <sequence>
+            <element name="filter" type="string" minOccurs="0" maxOccurs="1"></element>
+        </sequence>
+        <attribute name="startRow" type="base64Binary"></attribute>
+        <attribute name="endRow" type="base64Binary"></attribute>
+        <attribute name="batch" type="int"></attribute>
+        <attribute name="startTime" type="int"></attribute>
+        <attribute name="endTime" type="int"></attribute>
+    </complexType>    
+    """
+    def __createScannerBody(self):
+        body = "<Scanner batch=\"" + unicode(self.batch) + "\""
+        if self.startRow: body += " startRow=\"" + base64.b64encode(self.startRow) + "\""
+        if self.endRow: body += " endRow=\"" + base64.b64encode(self.endRow) + "\""
+        if self.startTime: body += " startTime=\"" + unicode(self.startTime) + "\""
+        if self.endTime: body += " endTime=\"" + unicode(self.endTime) + "\""
+        body += ">"
+        return body
+    
     def __openScanner(self):
-        body = "<Scanner batch=\"" + unicode(self.batch) + "\"/>"
+        body = self.__createScannerBody()
+        LOG.debug("openScanner: body -> %s" % body)
         url = "/" + self.table_name + "/scanner"
-        LOG.debug("openScanner: url %s" % url)
+        LOG.debug("openScanner: url -> %s" % url)
         res = doRequest(self.address, method="POST", url=url, headers=MIME_XML, body=body, status=201)
         # POST/PUT call returns a special header, e.g.
         #   Location: http://localhost:8000/content/scanner/12447063229213b1937
         loc = res["headers"]["location"]
         scanner_id = loc.rsplit("/", 1)[1]
-        LOG.debug("openScanner: ID %s" % scanner_id)
+        LOG.debug("openScanner: ID -> %s" % scanner_id)
         return scanner_id
             
     def __closeScanner(self, scanner_id):
         url = "/" + self.table_name + "/scanner/" + self.scanner_id
-        LOG.debug("closeScanner: url %s" % url)
+        LOG.debug("closeScanner: url -> %s" % url)
         res = doRequest(self.address, method="DELETE", url=url, headers=ACCEPT_JSON, status=200)
       
     def __getNextRows(self, scanner_id):
         url = url="/" + self.table_name + "/scanner/" + self.scanner_id
-        LOG.debug("getNextRow: url %s" % url)
+        LOG.debug("getNextRow: url -> %s" % url)
         res = doRequest(self.address, url=url, headers=ACCEPT_JSON)
         if res["status"] == 204: self.at_eot = True
         return res["body"]

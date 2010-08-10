@@ -21,11 +21,13 @@
 
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('hbexplorer',
-  url(r'^$', 'views.list_clusters'),
-  url(r'^edit/(?P<clusterid>.*)$', 'views.edit_cluster'),
-  url(r'^new$', 'views.edit_cluster', name="hbexplorer.newcluster"),
-  url(r'^delete/(?P<clusterid>.*)$', 'views.delete_cluster'),
-  url(r'^explore/(?P<clusterid>.*)$', 'views.explore_cluster')
+urlpatterns = patterns("hbexplorer.views",
+  url(r"^$", "list_clusters"),
+  url(r"^edit/(?P<clusterid>.*)$", "edit_cluster"),
+  url(r"^new$", "edit_cluster", name="new_cluster"),
+  url(r"^delete/(?P<clusterid>.*)$", "delete_cluster"),
+  url(r"^cluster/(?P<clusterid>.*)$", "explore_cluster"),
+  url(r"^table/(?P<clusterid>[^/]+)/table/(?P<tablename>.*)$", "explore_table"),
+  url(r"^edit/(?P<clusterid>[^/]+)/table/(?P<tablename>.*)$", "edit_table")
 )
 

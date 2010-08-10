@@ -38,6 +38,8 @@
 	  any elements inside it should also be absolutely positioned
 */
 
+/* List of Clusters Window */
+
 .hbexplorer img.hbexplorer_icon {
 	width: 55px;
 	height: 55px;
@@ -85,7 +87,7 @@
     border: 1px solid #333;
 }
 
-.hbexplorer_explorer a.hbexplorer-link-img {
+.hbexplorer_clusterlist .hbexplorer_clusterlist_left a.hidehelp {
     text-indent: -500px;
     display: block;
     float: left;
@@ -93,17 +95,35 @@
     width: 18px;
     overflow: hidden;
     margin-left: 0px;
-}
-.hbexplorer_explorer .hbexplorer_explorer_left a.hidehelp {
-    background: url('../art/application_side_contract.png') no-repeat 0 0px;
+	background: url('../art/application_side_contract.png') no-repeat 0 0px;
 }
 
-.hbexplorer_explorer ul.indent_15 {
+/* Cluster Window */
+
+.hbexplorer_cluster .hbexplorer_cluster_left p.version {
+	float: left; 
+	margin-right: 6px
+}
+
+.hbexplorer_cluster td a.hbexplorer-link-img {
+    text-indent: -500px;
+    display: block;
+    float: left;
+    height: 18px;
+    width: 18px;
+    overflow: hidden;
+    margin-left: 6px;
+}
+.hbexplorer_cluster .hbexplorer_cluster_right td a.edit {
+    background: url('../art/line_icons.png') no-repeat 0 -23px;
+}
+
+.hbexplorer_cluster ul.indent_15 {
     margin-left: 15px;
     padding-left: 15px;
 }
 
-.hbexplorer_explorer ul.indent_30 {
+.hbexplorer_cluster ul.indent_30 {
     margin-left: 30px;
     padding-left: 30px;
 }
