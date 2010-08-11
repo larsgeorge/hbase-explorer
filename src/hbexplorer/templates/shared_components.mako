@@ -63,3 +63,35 @@ from django.template.defaultfilters import urlencode, escape
     ${json}
   % endif
 </%def>
+
+<%def name="render_nodes(nodeslist)">
+  % for nodes in nodeslist:
+    % if nodes:
+      % for name, node in nodes.iteritems(): 
+  <h3>Name: ${node["name"]}</h3>
+  <p>
+  <table class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
+  <tr><td width="150">Start Code:</td><td>${node["startCode"]}</td></tr>
+  <tr><td>Max Heap Size:</td><td>${node["maxHeapSizeMB"]} MB</td></tr>
+  <tr><td>Requests:</td><td>${node["requests"]}</td></tr>
+  </table>
+  </p>
+  <u>Regions</u>
+        % for region in node["Region"]:
+  <p>
+  <table class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
+  <tr><td width="150">Name:</td><td>${region["name"]}</td></tr>
+  <tr><td>Memstore Size:</td><td>${region["memstoreSizeMB"]} MB</td></tr>
+  <tr><td>Stores:</td><td>${region["stores"]}</td></tr>
+  <tr><td>Store Files:</td><td>${region["storefiles"]}</td></tr>
+  <tr><td>Store File Size:</td><td>${region["storefileSizeMB"]} MB</td></tr>
+  <tr><td>Store File Index Size:</td><td>${region["storefileIndexSizeMB"]}</td></tr>
+  </table>
+  </p>
+        % endfor
+      % endfor
+    % else:
+    <p>None</p>
+    % endif
+  % endfor
+</%def>

@@ -71,40 +71,20 @@ ${shared.header(address)}
           </li>
           <li>
             <% status = cluster_info.getClusterStatus() %>
-            <h3>Summary</h3>
+            <h2>Summary</h2>
             <p>
               <table class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
-              <tr><td>Requests:</td><td>${status["requests"]}</td></tr>
+              <tr><td  width="150">Requests:</td><td>${status["requests"]}</td></tr>
               <tr><td>Average Load:</td><td>${status["averageLoad"]}</td></tr>
               <tr><td>Regions:</td><td>${status["regions"]}</td></tr>
               </table>
             </p>
-            <h3>Live Nodes</h3>
+            <h2>Live Nodes</h2><br/>
+              ${shared.render_nodes(status["LiveNodes"])}
+            <h2>Dead Nodes</h2>
             <p>
-              % for nodes in status["LiveNodes"]:
-                % for name, node in nodes.iteritems(): 
-              <table class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
-              <tr><td><div style="float: left; margin-right: 50px">Name:</div></td><td>${node["name"]}</td></tr>
-              <tr><td>Start Code:</td><td>${node["startCode"]}</td></tr>
-              <tr><td>Max Heap Size:</td><td>${node["maxHeapSizeMB"]} MB</td></tr>
-              <tr><td>Requests:</td><td>${node["requests"]}</td></tr>
-              </table>
-              <h4 style="margin-left: 50px">Regions</h4>
-                  % for region in node["Region"]:
-              <table style="margin-left: 50px" class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
-              <tr><td><div style="float: left; margin-right: 50px">Name:</div></td><td>${region["name"]}</td></tr>
-              <tr><td>Memstore Size:</td><td>${region["memstoreSizeMB"]} MB</td></tr>
-              <tr><td>Stores:</td><td>${region["stores"]}</td></tr>
-              <tr><td>Store Files:</td><td>${region["storefiles"]}</td></tr>
-              <tr><td>Store File Size:</td><td>${region["storefileSizeMB"]} MB</td></tr>
-              <tr><td>Store File Index Size:</td><td>${region["storefileIndexSizeMB"]}</td></tr>
-              </table>
-                  % endfor
-                % endfor
-              % endfor
+              ${shared.render_nodes(status["DeadNodes"])}
             </p>
-            <h3>Dead Nodes</h3>
-            <p>Dump: ${shared.render_json(status["DeadNodes"])}</p>
           </li>
         </ul>
       </div>
