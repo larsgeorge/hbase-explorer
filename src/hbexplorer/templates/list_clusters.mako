@@ -20,17 +20,17 @@
 <%namespace name="shared" file="shared_components.mako" />
 
 ${shared.header("HBase Explorer", search_entry=True)}
-</div>
-<div id="hbexplorer_clusterlist" class="view">
-  <div class="hbexplorer_clusterlist_wrapper splitview">
-    <div class="hbexplorer_clusterlist_left left_col jframe_padded">
+
+<div id="hbx_clusterlist" class="view">
+  <div data-filters="SplitView" class="hbx_clusterlist_wrapper">
+    <div class="hbx_clusterlist_left left_col jframe_padded">
       <p>Welcome to the<br/><b>HBase Explorer</b>.</p>
       <p>Please add to, delete from or edit the list of known clusters on the right.</p>
       <p>Click on an address to open an explorer window for the respective cluster.</p>
-      <p><a data-splitview-resize="{'left':0}" title="Hide help" class="hbexplorer-link-img hidehelp frame_tip">Hide</a></p>
+      <p><a data-splitview-resize="{'left':0}" title="Hide help" class="hbx_link_img hidehelp frame_tip">Hide</a></p>
     </div>
-    <div class="hbexplorer_clusterlist_right right_col jframe_padded">
-      <table class="ccs-data_table sortable" cellpadding="0" cellspacing="0">
+    <div class="hbx_clusterlist_right right_col">
+      <table data-filters="HtmlTable" class="sortable" cellpadding="0" cellspacing="0">
       <thead>
         <tr>
         <th>Cluster Address</th>
@@ -41,14 +41,14 @@ ${shared.header("HBase Explorer", search_entry=True)}
       % for cluster in clusters:
         <tr>
         <td>
-          <a class="hbexplorer_link_entry" target="HBaseExplorer" 
-             href="${ url('hbexplorer.views.explore_cluster', clusterid=cluster.address) }">${cluster.address}</a>
+          <a class="hbx_link_entry" target="HBaseExplorer" 
+             href="${ url('hbexplorer.views.edit_scan', clusterid=cluster.address) }">${cluster.address}</a>
         </td>
         <td>${cluster.description}</td>
         <td>
-          <a title="Edit ${cluster.address}" class="hbexplorer-link-img edit frame_tip" 
+          <a title="Edit ${cluster.address}" class="hbx_link_img edit frame_tip" 
              href="${ url('hbexplorer.views.edit_cluster', clusterid=cluster.address) }">Edit</a>
-          <a title="Delete ${cluster.address}" class="hbexplorer-link-img delete frame_tip confirm_and_post" 
+          <a title="Delete ${cluster.address}" class="hbx_link_img delete frame_tip confirm_and_post" 
              alt="Are you sure you want to delete ${cluster.address}?" 
              href="${ url('hbexplorer.views.delete_cluster', clusterid=cluster.address) }">Delete</a>
         </td>
@@ -56,7 +56,7 @@ ${shared.header("HBase Explorer", search_entry=True)}
       % endfor
       </tbody>
       </table>
-      <a class="hbexplorer_add_cluster" href="${ url('hbexplorer.views.edit_cluster') }">Add Cluster</a>
+      <a class="hbx_add_cluster" href="${ url('hbexplorer.views.edit_cluster') }">Add Cluster</a>
       ## only show "Show help" when left column was closed by user, see "Hide help" above
       ##<br/><br/><br/>
       ##<a data-splitview-toggle="{'side': 'left'}">Show help</a>

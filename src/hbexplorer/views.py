@@ -31,6 +31,8 @@ from django.core import urlresolvers
 from hbexplorer.models import ClusterAddress, ClusterInfo, TableScanner
 from hbexplorer.forms import ClusterEntryForm
 
+# List Clusters Window
+
 def list_clusters(request):
     return render('list_clusters.mako', request, dict(clusters=ClusterAddress.objects.all()))
 
@@ -66,9 +68,27 @@ def delete_cluster(request, clusterid):
         return render("confirm.mako", request,
         dict(path=request.path, title="Delete Cluster Entry?"))
 
-def explore_cluster(request, clusterid):
+# Explore Cluster Window(s)
+
+def edit_scan(request, clusterid, scanid=None, tablename=None):
+    return render('edit_scan.mako', request, dict(action=request.path, clusterid=clusterid, scanid=scanid, tablename=tablename))
+
+def list_user_scans(request, clusterid):
+    return render('show_cluster_info.mako', request, dict(clusterid=clusterid))
+
+def list_saved_scans(request, clusterid):
+    return render('show_cluster_info.mako', request, dict(clusterid=clusterid))
+
+def list_scan_history(request, clusterid):
+    return render('show_cluster_info.mako', request, dict(clusterid=clusterid))
+
+def list_tables(request, clusterid):
     cluster_info = ClusterInfo(address=clusterid)
-    return render('explore_cluster.mako', request, dict(address=clusterid, cluster_info=cluster_info))
+    return render('list_tables.mako', request, dict(clusterid=clusterid, cluster_info=cluster_info))
+
+def execute_scan(request, clusterid, scanid):
+    cluster_info = ClusterInfo(address=clusterid)
+    return render('show_cluster_info.mako', request, dict(clusterid=clusterid, cluster_info=cluster_info))
 
 def explore_table(request, clusterid, tablename):
     scanner = TableScanner(tablename, clusterid, batch=20)
@@ -78,5 +98,7 @@ def explore_table(request, clusterid, tablename):
     return render('explore_table.mako', request, 
                   dict(address=clusterid, tablename=tablename, cluster_info=cluster_info, rows=rows))
 
-def edit_table(request, clusterid, tablename):
-    return render('edit_cluster.mako', request, dict(address=clusterid, tablename=tablename))
+def show_cluster_info(request, clusterid):
+    cluster_info = ClusterInfo(address=clusterid)
+    return render('show_cluster_info.mako', request, dict(clusterid=clusterid, cluster_info=cluster_info))
+

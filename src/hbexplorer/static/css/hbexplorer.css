@@ -19,7 +19,8 @@
  */
  
  /* 
-	hbexplorer styles
+	HBase Explorer styles
+
 	important: these should be namespaced
 	example:
 		let's say you are creating an app called "calculator"; you should prefix all your styles with your application's name like so
@@ -40,17 +41,17 @@
 
 /* List of Clusters Window */
 
-.hbexplorer img.hbexplorer_icon {
+div.hbexplorer img.hbx_icon {
 	width: 55px;
 	height: 55px;
 	position: absolute;
 	top: 27px;
 	left: 3px;
 }
-.hbexplorer_clusterlist table {
+.hbx_clusterlist table {
     border-bottom: 1px solid #B2B2B2;
 }
-.hbexplorer_clusterlist td a.hbexplorer-link-img {
+.hbx_clusterlist td a.hbx_link_img {
     text-indent: -500px;
     display: block;
     float: left;
@@ -59,13 +60,13 @@
     overflow: hidden;
     margin-left: 6px;
 }
-.hbexplorer_clusterlist td a.edit {
+.hbx_clusterlist td a.edit {
     background: url('../art/line_icons.png') no-repeat 0 -23px;
 }
-.hbexplorer_clusterlist td a.delete {
+.hbx_clusterlist td a.delete {
     background: url('../art/line_icons.png') no-repeat 0 -70px;
 }
-.hbexplorer_clusterlist a.hbexplorer_add_cluster {
+.hbx_clusterlist a.hbx_add_cluster {
     float: right;
     display: block;
     width: 75px;
@@ -80,14 +81,13 @@
     margin: 8px;
     padding-left: 26px;
 }
-.hbexplorer_clusterlist a.hbexplorer_add_cluster:hover {
+.hbx_clusterlist a.hbx_add_cluster:hover {
     text-decoration: none;
     background: #ddd url('../art/line_icons.png') no-repeat 4px -88px;
     color: #333;
     border: 1px solid #333;
 }
-
-.hbexplorer_clusterlist .hbexplorer_clusterlist_left a.hidehelp {
+.hbx_clusterlist .hbx_clusterlist_left a.hidehelp {
     text-indent: -500px;
     display: block;
     float: left;
@@ -100,12 +100,11 @@
 
 /* Cluster Window */
 
-.hbexplorer_cluster .hbexplorer_cluster_left p.version {
+.hbx_cluster .hbx_cluster_left p.version {
 	float: left; 
 	margin-right: 6px
 }
-
-.hbexplorer_cluster td a.hbexplorer-link-img {
+.hbx_cluster td a.hbx_link_img {
     text-indent: -500px;
     display: block;
     float: left;
@@ -114,21 +113,54 @@
     overflow: hidden;
     margin-left: 6px;
 }
-.hbexplorer_cluster .hbexplorer_cluster_right td a.edit {
+.hbx_cluster .hbx_cluster_right td a.edit {
     background: url('../art/line_icons.png') no-repeat 0 -23px;
 }
-
-.hbexplorer_cluster ul.indent_15 {
+.hbx_cluster .hbx_cluster_right td a.open {
+    background: url('/static/art/icons/application_go.png') no-repeat !important;
+}
+.hbx_cluster ul.indent_15 {
     margin-left: 15px;
     padding-left: 15px;
 }
-
-.hbexplorer_cluster ul.indent_30 {
+.hbx_cluster ul.indent_30 {
     margin-left: 30px;
     padding-left: 30px;
 }
-
-.toolbar .hbexplorer-tb-actions {
+div.hbexplorer .hbx_nav {
+  position: relative;
+  top: 24px;
+  left: 80px;
+}
+div.hbexplorer a.hbx_nav_icon {
+  padding: 6px 8px 6px 25px;
+  height: 25px;
+}
+div.hbexplorer a.hbx_new_table_nav {
+  background: url(/static/art/icons/database_add.png) no-repeat;
+}
+div.hbexplorer a.hbx_tables_nav {
+  background: url(/static/art/icons/table_multiple.png) no-repeat;
+}
+div.hbexplorer a.hbx_my_queries_nav {
+  background: url(/static/art/led-icons/star_2.png) no-repeat;
+}
+div.hbexplorer a.hbx_queries_nav {
+  background: url(/static/art/icons/application_form_edit.png) no-repeat;
+}
+div.hbexplorer a.hbx_query_nav {
+  background: url(/static/art/icons/application_form_magnify.png) no-repeat;
+}
+div.hbexplorer a.hbx_new_report_gen_nav {
+  background: url(/static/art/icons/layout_add.png) no-repeat;
+}
+div.hbexplorer a.hbx_history_nav {
+  background: url(/static/art/led-icons/clock.png) no-repeat;
+}
+div.hbexplorer a.hbx_config_nav {
+  background: url(/static/art/icons/cog.png) no-repeat;
+}
+.toolbar .hbx_tb_actions {
     position: absolute;
     top: 58px;
     text-align: right;

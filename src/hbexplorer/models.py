@@ -55,17 +55,6 @@ def doRequest(host=None, method="GET", url=None, headers=None, body=None, timeou
         if conn: conn.close();
     return {"body":data, "status":response.status, "headers":dict(response.getheaders())}
     
-class ClusterAddress(models.Model):
-    """
-    Holds metadata about all the known clusters.
-    """
-    owner = models.ForeignKey(User, db_index=True)
-    address = models.CharField(max_length=128, unique=True)
-    description = models.CharField(max_length=1024)
-
-    class Meta:
-        ordering = ["address"]
-
 class ClusterInfo(object):
     
     def __init__(self, address):
@@ -102,6 +91,24 @@ class ClusterInfo(object):
 class TableScanner(object):
 
     def __init__(self, table_name, address, startRow=None, endRow=None, batch=1, startTime=None, endTime=None):
+        """
+        Creates a new instance.
+        
+        See http://wiki.apache.org/hadoop/Hbase/Stargate for reference:
+        <complexType name="Scanner">
+            <sequence>
+                <element name="column" type="base64Binary" minOccurs="0" maxOccurs="unbounded"></element>
+            </sequence>
+            <sequence>
+                <element name="filter" type="string" minOccurs="0" maxOccurs="1"></element>
+            </sequence>
+            <attribute name="startRow" type="base64Binary"></attribute>
+            <attribute name="endRow" type="base64Binary"></attribute>
+            <attribute name="batch" type="int"></attribute>
+            <attribute name="startTime" type="int"></attribute>
+            <attribute name="endTime" type="int"></attribute>
+        </complexType>    
+        """
         self.table_name = table_name
         self.address = address
         self.startRow = startRow
@@ -111,22 +118,7 @@ class TableScanner(object):
         self.endTime = endTime
         self.at_eot = False
         self.scanner_id = self.__openScanner()
-        
-    """
-    <complexType name="Scanner">
-        <sequence>
-            <element name="column" type="base64Binary" minOccurs="0" maxOccurs="unbounded"></element>
-        </sequence>
-        <sequence>
-            <element name="filter" type="string" minOccurs="0" maxOccurs="1"></element>
-        </sequence>
-        <attribute name="startRow" type="base64Binary"></attribute>
-        <attribute name="endRow" type="base64Binary"></attribute>
-        <attribute name="batch" type="int"></attribute>
-        <attribute name="startTime" type="int"></attribute>
-        <attribute name="endTime" type="int"></attribute>
-    </complexType>    
-    """
+            
     def __createScannerBody(self):
         body = "<Scanner batch=\"" + unicode(self.batch) + "\""
         if self.startRow: body += " startRow=\"" + base64.b64encode(self.startRow) + "\""
@@ -169,3 +161,70 @@ class TableScanner(object):
     
     def at_eof(self):
         return self.at_eot
+    
+class ClusterAddress(models.Model):
+    """
+    Holds metadata about all the known clusters.
+    """
+    owner = models.ForeignKey(User, db_index=True)
+    address = models.CharField(max_length=128, unique=True)
+    description = models.CharField(max_length=1024)
+
+    class Meta:
+        ordering = ["address"]
+
+class SavedScan(models.Model):
+    """
+    Stores the scans that people have saved or submitted.
+    """
+    DEFAULT_NEW_SCAN_NAME = 'My saved scan'
+    AUTO_DESIGN_SUFFIX = ' (new)'
+
+    owner = models.ForeignKey(User, db_index=True)
+    startRow = models.CharField(max_length=1024)
+    endRow = models.CharField(max_length=1024)
+    batch = models.IntegerField()
+    startTime = models.CharField(max_length=16)
+    endTime = models.CharField(max_length=16)
+    description = models.TextField(max_length=1024)
+    # An auto design is a place-holder for things users submit but not saved.
+    # We still want to store it as a scan to allow users to save them later.
+    is_auto = models.BooleanField(default=False, db_index=True)
+    mtime = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-mtime']
+
+    def clone(self):
+        """clone() -> A new SavedScan with a deep copy of the same data"""
+        scan = SavedScan(type=self.type, owner=self.owner)
+        scan.startRow = copy.deepcopy(self.startRow)
+        scan.endRow = copy.deepcopy(self.endRow)
+        scan.batch = copy.deepcopy(self.batch)
+        scan.startTime = copy.deepcopy(self.startTime)
+        scan.endTime = copy.deepcopy(self.endTime)
+        scan.description = copy.deepcopy(self.decription)
+        scan.is_auto = copy.deepcopy(self.is_auto)
+        return scan
+
+    @staticmethod
+    def get(id, owner=None):
+        """
+        get(id, owner=None) -> SavedScan object
+    
+        Checks that the owner matches (when given).
+        May raise PopupException (owner mismatch).
+        May raise SavedScan.DoesNotExist.
+        """
+        try:
+          scan = SavedScan.objects.get(id=id)
+        except SavedScan.DoesNotExist, err:
+          msg = 'Cannot retrieve scan id %s' % (id,)
+          raise err
+    
+        if owner is not None and design.owner != owner:
+          msg = 'Scan id %s does not belong to user %s' % (id, owner)
+          LOG.error(msg)
+          raise PopupException(msg)
+    
+        return scan

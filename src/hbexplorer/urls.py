@@ -23,11 +23,15 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns("hbexplorer.views",
   url(r"^$", "list_clusters"),
-  url(r"^edit/(?P<clusterid>.*)$", "edit_cluster"),
   url(r"^new$", "edit_cluster", name="new_cluster"),
+  url(r"^edit/(?P<clusterid>.*)$", "edit_cluster"),
   url(r"^delete/(?P<clusterid>.*)$", "delete_cluster"),
-  url(r"^cluster/(?P<clusterid>.*)$", "explore_cluster"),
-  url(r"^table/(?P<clusterid>[^/]+)/table/(?P<tablename>.*)$", "explore_table"),
-  url(r"^edit/(?P<clusterid>[^/]+)/table/(?P<tablename>.*)$", "edit_table")
+  url(r"^cluster/(?P<clusterid>[^/]+)/info$", "show_cluster_info"),
+  url(r"^cluster/(?P<clusterid>[^/]+)/tables$", "list_tables"),
+  url(r"^cluster/(?P<clusterid>[^/]+)/explore/(?P<tablename>)$", "explore_table"),
+  url(r"^cluster/(?P<clusterid>[^/]+)/execute/(?P<scanid>)$", "execute_scan"),
+  url(r"^cluster/(?P<clusterid>[^/]+)/history$", "list_scan_history"),
+  url(r"^cluster/(?P<clusterid>[^/]+)/saved$", "list_saved_scans"),
+  url(r"^cluster/(?P<clusterid>[^/]+)/scans$", "list_user_scans"),
+  url(r"^cluster/(?P<clusterid>.*)$", "edit_scan")
 )
-

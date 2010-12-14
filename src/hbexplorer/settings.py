@@ -19,6 +19,7 @@
 # */
 
 DJANGO_APPS = [ "hbexplorer" ]
+NICE_NAME = "HBase Explorer"
 REQUIRES_HADOOP = False
 
 DEPENDER_PACKAGE_YMLS = [

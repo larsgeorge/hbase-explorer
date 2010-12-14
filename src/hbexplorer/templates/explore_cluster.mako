@@ -19,20 +19,20 @@
 ## */
 <%namespace name="shared" file="shared_components.mako" />
 
-${shared.header(address)}
+${shared.header(address, section='scan')}
 </div>
-<div id="hbexplorer_cluster" class="view">
-  <div class="hbexplorer_cluster_wrapper splitview">
-    <div class="hbexplorer_cluster_left left_col jframe_padded">
+<div id="hbx_cluster" class="view">
+  <div class="hbx_cluster_wrapper splitview">
+    <div class="hbx_cluster_left left_col jframe_padded">
       <p><b>Cluster Browser</b></p>
       <p class="version">Version: HBase ${shared.render_json(cluster_info.getClusterVersion())} 
-      <div class="ccs-info_text">${shared.render_json(cluster_info.getVersion())}</div></p>
+      <div class="ccs-info_text" style="text-align: right;">${shared.render_json(cluster_info.getVersion())}</div></p>
       <p>The first tab on the right shows the list of available tables. Click on the tabkle name to open a new
          window where you can browse its data or see its schema. You can open more than one table window if you like.</p>
       <p>The second tab displays the cluster status. This includes the various nodes of the cluster and what regions
          they host.</p>
     </div>
-    <div class="hbexplorer_cluster_right right_col jframe_padded">
+    <div class="hbx_cluster_right right_col jframe_padded">
       <div class="ccs-tab_ui">
         <ul class="ccs-tabs clearfix">
             <li><span>Tables</span></li>
@@ -53,12 +53,14 @@ ${shared.header(address)}
               % for table in tables:
               <tr>
               <td>
-                <a class="hbexplorer_link_entry" target="HBaseExplorer" 
+                <a class="hbx_link_entry" target="HBaseExplorer" 
                    href="${ url('hbexplorer.views.explore_table', clusterid=address, tablename=table) }">${table}</a>
               </td>
               <td>
-                <a title="Edit ${table}" class="hbexplorer-link-img edit frame_tip" 
-                   href="${ url('hbexplorer.views.edit_table', clusterid=address, tablename=table) }">Edit</a>
+                <a title="Edit scan for ${table}" class="hbx_link_img edit frame_tip" 
+                   href="${ url('hbexplorer.views.edit_scan', clusterid=address, tablename=table) }">Edit</a>
+                <a title="Open full scan for ${table}" class="hbx_link_img open frame_tip" 
+                   href="${ url('hbexplorer.views.execute_scan', clusterid=address, tablename=table) }">Open</a>
               </td>
               </tr>
               % endfor

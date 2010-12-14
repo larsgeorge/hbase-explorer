@@ -38,7 +38,8 @@ CCS.HBaseExplorer = new Class({
 	Extends: CCS.JBrowser,
 
 	options: {
-		className: 'art browser logo_header hbexplorer'
+		className: 'art browser logo_header hbexplorer',
+    displayHistory: false
 	},
 
 	initialize: function(path, options){

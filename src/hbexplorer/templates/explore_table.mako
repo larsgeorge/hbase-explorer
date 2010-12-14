@@ -21,15 +21,15 @@
 
 ${shared.header(address + " :: " + tablename)}
 </div>
-<div id="hbexplorer_table" class="view">
-  <div class="hbexplorer_table_wrapper splitview">
-    <div class="hbexplorer_table_left left_col jframe_padded">
+<div id="hbx_table" class="view">
+  <div class="hbx_table_wrapper splitview">
+    <div class="hbx_table_left left_col jframe_padded">
       <p><b>Table Browser</b></p>
       <p class="version"><u>Version:</u> HBase ${shared.render_json(cluster_info.getClusterVersion())} 
       <div class="ccs-info_text">${shared.render_json(cluster_info.getVersion())}</div></p>
       <p>Navigate through the table data. To do: Scan specific areas, search for a start row etc.</p>
     </div>
-    <div class="hbexplorer_table_right right_col jframe_padded">
+    <div class="hbx_table_right right_col jframe_padded">
       <div class="ccs-tab_ui">
         <ul class="ccs-tabs clearfix">
             <li><span>Data</span></li>
@@ -49,11 +49,11 @@ ${shared.header(address + " :: " + tablename)}
               % for table in tables:
               <tr>
               <td>
-                <a class="hbexplorer_link_entry" target="HBaseExplorer" 
+                <a class="hbx_link_entry" target="HBaseExplorer" 
                    href="${ url('hbexplorer.views.explore_table', clusterid=address, tablename=table) }">${table}</a>
               </td>
               <td>
-                <a title="Edit ${table}" class="hbexplorer-link-img edit frame_tip" 
+                <a title="Edit ${table}" class="hbx_link_img edit frame_tip" 
                    href="${ url('hbexplorer.views.edit_table', clusterid=address, tablename=table) }">Edit</a>
               </td>
               </tr>
